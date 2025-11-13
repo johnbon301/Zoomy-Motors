@@ -5,19 +5,16 @@ import { fileURLToPath } from 'url';
 const app = express();
 const PORT = 4687;
 
-// Needed for __dirname in ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Serve static frontend files
+
 app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
-
 app.get('/api/hello', (req, res) => {
-  res.json({ message: 'Hello from the backend!' });
+  res.json({ message: 'Hello, World!' });
 });
 
-// Serve frontend for all other routes
 app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });

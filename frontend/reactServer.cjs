@@ -5,10 +5,8 @@ const app = express();
 
 const PORT = 4687;
 
-// Serve the built React app
 app.use(express.static(path.join(__dirname, 'dist')));
 
-// Redirect all routes to React
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
 });
