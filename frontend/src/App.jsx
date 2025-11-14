@@ -11,50 +11,46 @@ import Navigation from './components/Navigation';
 
 function App() {
 
-const backendPort = 4687;  // Use the port you assigned to the backend server, this would normally go in .env file
-const backendURL = `http://classwork.engr.oregonstate.edu:${backendPort}/api/hello`;
-    // Set up a state variable `message` to store and display the backend response
-    const [message, setMessage] = useState([]);
+  // Use the port you assigned to the backend server; consider moving to an env var later
+  const backendPort = 4687;
+  // Provide the base URL (do not include an endpoint here). Pages will append `/api/...` as needed.
+  const backendURL = `http://classwork.engr.oregonstate.edu:${backendPort}`;
 
-    useEffect(() => {
-    // GET the data from the database
+  // Optional: keep a small health check fetch (adjust endpoint as your backend exposes it)
+  const [message, setMessage] = useState([]);
+  useEffect(() => {
     const getData = async () => {
-        try {
-            // make a GET request to the backend
-            const response = await fetch(backendURL);
-            // convert the response into JSON format
-            const rows = await response.json();
-            // update the message state with response data
-            setMessage(JSON.stringify(rows));
-            
-        } catch (error) {
-          // if API call fails, print the error to the console
-          console.log('Error fetching backend', error);
-        }
-    };    
+      try {
+        const response = await fetch(`${backendURL}/api/hello`);
+        const rows = await response.json();
+        setMessage(JSON.stringify(rows));
+      } catch (error) {
+        console.log('Error fetching backend', error);
+      }
+    };
     getData();
   }, [backendURL]);
 
   return (
     <div className="app">
 
-          <h1>  Car Dealership </h1>
-          <p> Welcome to the Zoomy Motors </p>
-          <Navigation />
+      <h1> Car Dealership </h1>
+      <p> Welcome to the Zoomy Motors </p>
+      <Navigation backendURL={backendURL} />
 
-          <Routes>
-            <Route path="/" element={<Homepage />}></Route>
-            <Route path="/cars" element={ <Cars />}></Route>
-            <Route path="/customer" element={ <Customers />}></Route>
-            <Route path="/orderdetails" element={ <OrderDetail />}></Route>
-            <Route path="/payment" element={ <Payment />}></Route>
-            <Route path="/SaleCars" element={ <SaleCars />}></Route>
-            <Route path="/test-drives" element={ <TestDrives />}></Route>
-          </Routes>
+      <Routes>
+        <Route path="/" element={<Homepage backendURL={backendURL} />} />
+        <Route path="/cars" element={<Cars backendURL={backendURL} />} />
+        <Route path="/customers" element={<Customers backendURL={backendURL} />} />
+        <Route path="/orderdetails" element={<OrderDetail backendURL={backendURL} />} />
+        <Route path="/payment" element={<Payment backendURL={backendURL} />} />
+        <Route path="/SaleCars" element={<SaleCars backendURL={backendURL} />} />
+        <Route path="/test-drives" element={<TestDrives backendURL={backendURL} />} />
+      </Routes>
 
-        <footer> © 2025 Zoomy Motors </footer>
-    </div>     
-  ); 
+      <footer> © 2025 Zoomy Motors </footer>
+    </div>
+  );
 }
 
 export default App;

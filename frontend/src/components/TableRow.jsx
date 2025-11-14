@@ -1,13 +1,46 @@
 import DeleteForm from './DeleteForm';
 
-const TableRow = ({ rowObject, backendURL, refresh }) => {
+const TableRow = ({
+    rowObject,
+    columns,
+    idKey = 'id',
+    backendURL = '',
+    endpoint = '',
+    refresh = () => {},
+    onEdit,
+    showActions = true,
+}) => {
+    const idValue = rowObject[idKey] ?? rowObject.id ?? rowObject.CarID ?? rowObject.CustomerID;
+
+    const normalizeUrl = (base, ep) => {
+        const b = (base || '').replace(/\/$/, '');
+        const e = ep ? (ep.startsWith('/') ? ep : `/${ep}`) : '';
+        return `${b}${e}`;
+    };
+
+    // deletion is delegated to `DeleteForm` when used inline
+
+    const handleEdit = (e) => {
+        e.preventDefault();
+        if (typeof onEdit === 'function') onEdit(rowObject);
+    };
+
+    const keys = Array.isArray(columns) && columns.length > 0 ? columns : Object.keys(rowObject);
+
     return (
         <tr>
-            {Object.values(rowObject).map((value, index) => (
-                <td key={index}>{value}</td>
+            {keys.map((k, i) => (
+                <td key={i}>{String(rowObject[k] ?? '')}</td>
             ))}
-            
-            <DeleteForm rowObject={rowObject} backendURL={backendURL} refresh={refresh} />
+
+            {showActions && (
+                <td>
+                    {onEdit && (
+                        <button onClick={handleEdit} style={{ marginRight: 8 }}>Edit</button>
+                    )}
+                    <DeleteForm singleId={idValue} endpoint={endpoint} backendURL={backendURL} refresh={refresh} compact={true} />
+                </td>
+            )}
         </tr>
     );
 };

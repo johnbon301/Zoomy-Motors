@@ -6,7 +6,10 @@ function Navigation() {
             <ul>
                 <li><Link to="/"> Home </Link></li>
                 <li><Link to="/cars"> Buy Car </Link></li>
+                <li><Link to="/customers"> Customers </Link></li>
+                <li><Link to="/orderdetails"> Order Details </Link></li>
                 <li><Link to="/payment"> Payment </Link></li>
+                <li><Link to="/salecars"> SaleCars </Link></li>
                 <li><Link to="/test-drives"> Test Drive </Link></li>
             </ul>
         </nav>
