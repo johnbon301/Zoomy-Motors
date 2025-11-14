@@ -2,17 +2,15 @@ import {Link} from 'react-router-dom';
 
 function Navigation() {
     return (
-        <div className="content">
-            <nav>
-                <Link to="/"> Home </Link>
-                <Link to="/cars"> Buy Car </Link>
-                <Link to="/payment"> Payment </Link>
-                <Link to="/test-drives"> Test Drive </Link>
-            </nav>
-        </div>
-
-    )
-
+        <nav className="content">
+            <ul>
+                <li><Link to="/"> Home </Link></li>
+                <li><Link to="/cars"> Buy Car </Link></li>
+                <li><Link to="/payment"> Payment </Link></li>
+                <li><Link to="/test-drives"> Test Drive </Link></li>
+            </ul>
+        </nav>
+    );
 }
 
 export default Navigation;
