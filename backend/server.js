@@ -10,21 +10,11 @@ const PORT = 4687;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.use(cors({ credentials: true, origin: '*' }));
+app.use(cors({ credentials: true, origin: 'http://classwork.engr.oregonstate.edu:9995' }));
 app.use(express.json());
 
 app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
-
-app.get('/api/test-db', async (req, res) => {
-  try {
-    const [rows] = await db.query('SELECT 1 + 1 AS result');
-    res.status(200).json({ success: true, message: 'Database connected!', result: rows[0].result });
-  } catch (error) {
-    console.error(' Database test failed:', error);
-    res.status(500).json({ success: false, message: 'Database connection failed.' });
-  }
-});
 
 app.get('/api/bsg_people', async (req, res) => {
   try {
