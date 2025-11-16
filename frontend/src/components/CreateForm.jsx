@@ -61,14 +61,29 @@ const CreateForm = ({ fields, endpoint, backendURL, refresh, title = "Create Rec
                 {fields.map(field => (
                     <div key={field.name}>
                         <label htmlFor={field.name}>{field.label}: </label>
-                        <input
-                            type={field.type}
-                            name={field.name}
-                            id={field.name}
-                            value={formData[field.name]}
-                            onChange={handleChange}
-                            required={field.required || false}
-                        />
+                        {field.type === 'select' && Array.isArray(field.options) ? (
+                            <select
+                                name={field.name}
+                                id={field.name}
+                                value={formData[field.name]}
+                                onChange={handleChange}
+                                required={field.required || false}
+                            >
+                                <option value="">-- Select --</option>
+                                {field.options.map(opt => (
+                                    <option key={opt} value={opt}>{opt}</option>
+                                ))}
+                            </select>
+                        ) : (
+                            <input
+                                type={field.type}
+                                name={field.name}
+                                id={field.name}
+                                value={formData[field.name]}
+                                onChange={handleChange}
+                                required={field.required || false}
+                            />
+                        )}
                     </div>
                 ))}
                 <input type="submit" value="Create" disabled={loading} />

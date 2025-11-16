@@ -44,7 +44,8 @@ function Payment({ backendURL }) {
                             fields={[
                                 { name: 'CustomerID', label: 'Customer ID', type: 'number', required: true },
                                 { name: 'SaleDate', label: 'Sale Date', type: 'date' },
-                                { name: 'Total', label: 'Total', type: 'number' }
+                                { name: 'Total', label: 'Total', type: 'number' },
+                                { name: 'PaymentMethod', label: 'Payment Method', type: 'select', options: ['Cash', 'Credit Card', 'Debit Card'] }
                             ]}
                             endpoint={'/api/sales'}
                             backendURL={backendURL}
@@ -61,7 +62,8 @@ function Payment({ backendURL }) {
                             fields={[
                                 { name: 'CustomerID', label: 'Customer ID', type: 'number' },
                                 { name: 'SaleDate', label: 'Sale Date', type: 'date' },
-                                { name: 'Total', label: 'Total', type: 'number' }
+                                { name: 'Total', label: 'Total', type: 'number' },
+                                { name: 'PaymentMethod', label: 'Payment Method', type: 'select', options: ['Cash', 'Credit Card', 'Debit Card'] }
                             ]}
                             endpoint={'/api/sales'}
                             backendURL={backendURL}

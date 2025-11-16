@@ -15,17 +15,6 @@ app.use(express.json());
 
 app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
-
-app.get('/api/bsg_people', async (req, res) => {
-  try {
-    const [rows] = await db.query('SELECT * FROM bsg_people;');
-    res.json(rows);
-  } catch (err) {
-    console.error('Error executing query:', err);
-    res.status(500).send('Database query failed.');
-  }
-});
-
 // CRUD Routes for Customers
 // READ - Get all customers
 app.get('/api/customers', async (req, res) => {
@@ -120,10 +109,6 @@ app.delete('/api/customers/:id', async (req, res) => {
   }
 });
 
-app.get('/api/hello', (req, res) => {
-  console.log('hello route');
-  res.json({ message: 'Hello, World!' });
-});
 
 // ============================================
 // CUSTOMERS CRUD

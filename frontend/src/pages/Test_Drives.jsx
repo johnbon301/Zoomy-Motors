@@ -45,7 +45,8 @@ function Test_Drives({ backendURL }) {
                                 { name: 'CustomerID', label: 'Customer ID', type: 'number', required: true },
                                 { name: 'CarID', label: 'Car ID', type: 'number', required: true },
                                 { name: 'DriveDate', label: 'Drive Date', type: 'date' },
-                                { name: 'Notes', label: 'Notes', type: 'text' }
+                                { name: 'Notes', label: 'Notes', type: 'text' },
+                                { name: 'Status', label: 'Status', type: 'select', options: ['Scheduled', 'Completed', 'Cancelled'] }
                             ]}
                             endpoint={'/api/testdrives'}
                             backendURL={backendURL}
@@ -63,7 +64,7 @@ function Test_Drives({ backendURL }) {
                                 { name: 'CustomerID', label: 'Customer ID', type: 'number' },
                                 { name: 'CarID', label: 'Car ID', type: 'number' },
                                 { name: 'DriveDate', label: 'Drive Date', type: 'date' },
-                                { name: 'Notes', label: 'Notes', type: 'text' }
+                                { name: 'Status', label: 'Status', type: 'select', options: ['Scheduled', 'Completed', 'Cancelled'] }
                             ]}
                             endpoint={'/api/testdrives'}
                             backendURL={backendURL}

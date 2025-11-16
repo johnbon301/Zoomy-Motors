@@ -112,14 +112,28 @@ const UpdateForm = ({ // sets up the props
                 {fields.map(field => (
                     <div key={field.name}>
                         <label htmlFor={field.name}>{field.label}: </label>
-                        <input
-                            type={field.type}
-                            name={field.name}
-                            id={field.name}
-                            value={formData[field.name]}
-                            onChange={handleFieldChange}
-                            placeholder={`Enter new ${field.label.toLowerCase()}`}
-                        />
+                        {field.type === 'select' && Array.isArray(field.options) ? (
+                            <select
+                                name={field.name}
+                                id={field.name}
+                                value={formData[field.name]}
+                                onChange={handleFieldChange}
+                            >
+                                <option value="">-- Select --</option>
+                                {field.options.map(opt => (
+                                    <option key={opt} value={opt}>{opt}</option>
+                                ))}
+                            </select>
+                        ) : (
+                            <input
+                                type={field.type}
+                                name={field.name}
+                                id={field.name}
+                                value={formData[field.name]}
+                                onChange={handleFieldChange}
+                                placeholder={`Enter new ${field.label.toLowerCase()}`}
+                            />
+                        )}
                     </div>
                 ))}
 

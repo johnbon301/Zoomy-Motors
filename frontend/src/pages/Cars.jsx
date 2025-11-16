@@ -65,11 +65,11 @@ function Cars({ backendURL }) {
                 { name: "Year", label: "Year", type: "number" },
                 { name: "Make", label: "Make", type: "text" },
                 { name: "Price", label: "Price", type: "number" },
-                { name: "Status", label: "Status", type: "text" },
+                { name: "Status", label: "Status", type: "select", options: ['Sold', 'Not Sold'] },
                 { name: "Stock", label: "Stock", type: "number" },
-                { name: "Mileage", label: "Mileage", type: "text" },
+                { name: "Mileage", label: "Mileage", type: "number" },
                 { name: "Color", label: "Color", type: "text" },
-                { name: "Horsepower", label: "Horsepower", type: "text" }
+                { name: "Horsepower", label: "Horsepower", type: "number" }
               ]}
               endpoint={"/api/cars"}
               backendURL={backendURL}
@@ -88,11 +88,11 @@ function Cars({ backendURL }) {
                 { name: "Year", label: "Year", type: "number" },
                 { name: "Make", label: "Make", type: "text" },
                 { name: "Price", label: "Price", type: "number" },
-                { name: "Status", label: "Status", type: "text" },
+                { name: "Status", label: "Status", type: "select", options: ['Sold', 'Not Sold'] },
                 { name: "Stock", label: "Stock", type: "number" },
-                { name: "Mileage", label: "Mileage", type: "text" },
+                { name: "Mileage", label: "Mileage", type: "number" },
                 { name: "Color", label: "Color", type: "text" },
-                { name: "Horsepower", label: "Horsepower", type: "text" }
+                { name: "Horsepower", label: "Horsepower", type: "number" }
               ]}
               endpoint={"/api/cars"}
               backendURL={backendURL}
