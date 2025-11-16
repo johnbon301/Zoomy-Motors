@@ -19,11 +19,11 @@ function SaleCars({ backendURL }) {
 
     return (
         <>
-            <main style={{ padding: 16 }}>
+            <main className="main-container">
                 <h1>Sales - Cars</h1>
 
-                <section style={{ marginBottom: 20 }}>
-                    <table border="1" cellPadding="6" style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <section className="section">
+                    <table className="table" border="1" cellPadding="6">
                         <thead>
                             <tr>
                                 {links.length > 0 ? Object.keys(links[0]).map(h => <th key={h}>{h}</th>) : <th>No data</th>}
@@ -38,8 +38,8 @@ function SaleCars({ backendURL }) {
                     </table>
                 </section>
 
-                <section style={{ display: 'flex', gap: 24 }}>
-                    <div style={{ flex: 1 }}>
+                <section className="flex-row">
+                    <div className="flex-1">
                         <CreateForm
                             fields={[
                                 { name: 'SaleID', label: 'Sale ID', type: 'number', required: true },
@@ -53,7 +53,7 @@ function SaleCars({ backendURL }) {
                         />
                     </div>
 
-                    <div style={{ flex: 1 }}>
+                    <div className="flex-1">
                         <UpdateForm
                             records={links}
                             recordIdKey={'ID'}

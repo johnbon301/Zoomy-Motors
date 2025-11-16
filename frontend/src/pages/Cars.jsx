@@ -25,12 +25,12 @@ function Cars({ backendURL }) {
     <>
       {/* Optional top navigation */}
 
-      <main style={{ padding: 16 }}>
+      <main className="main-container">
         <h1>Cars</h1>
 
-        <section style={{ marginBottom: 24 }}>
+        <section className="section mb-24">
           <h2>Inventory</h2>
-          <table border="1" cellPadding="6" cellSpacing="0" style={{ width: "100%", borderCollapse: "collapse" }}>
+          <table className="table" border="1" cellPadding="6" cellSpacing="0">
             <thead>
               <tr>
                 {cars.length > 0
@@ -57,8 +57,8 @@ function Cars({ backendURL }) {
           </table>
         </section>
 
-        <section style={{ display: "flex", gap: 24 }}>
-          <div style={{ flex: 1 }}>
+        <section className="flex-row">
+          <div className="flex-1">
             <CreateForm
               fields={[
                 { name: "Model", label: "Model", type: "text", required: true },
@@ -78,7 +78,7 @@ function Cars({ backendURL }) {
             />
           </div>
 
-          <div style={{ flex: 1 }}>
+          <div className="flex-1">
             <UpdateForm
               records={cars}
               recordIdKey={"CarID"}

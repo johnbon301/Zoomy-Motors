@@ -36,7 +36,7 @@ const TableRow = ({
             {showActions && (
                 <td>
                     {onEdit && (
-                        <button onClick={handleEdit} style={{ marginRight: 8 }}>Edit</button>
+                        <button onClick={handleEdit} className="btn-edit">Edit</button>
                     )}
                     <DeleteForm singleId={idValue} endpoint={endpoint} backendURL={backendURL} refresh={refresh} compact={true} />
                 </td>

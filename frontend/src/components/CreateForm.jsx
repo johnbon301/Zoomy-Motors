@@ -56,7 +56,7 @@ const CreateForm = ({ fields, endpoint, backendURL, refresh, title = "Create Rec
     return (
         <>
             <h2>{title}</h2>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {error && <p className='error'>{error}</p>}
             <form className='cuForm' onSubmit={handleSubmit}>
                 {fields.map(field => (
                     <div key={field.name}>

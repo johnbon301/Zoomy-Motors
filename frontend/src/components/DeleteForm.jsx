@@ -92,7 +92,7 @@ const DeleteForm = ({
                 onClick={handleDelete}
                 disabled={loading}
                 title="Delete record"
-                style={{ backgroundColor: '#dc3545', color: 'white' }}
+                className="btn-delete"
             >
                 Delete
             </button>
@@ -102,7 +102,7 @@ const DeleteForm = ({
     return (
         <>
             {!compact && <h2>{title}</h2>}
-            {!compact && error && <p style={{ color: 'red' }}>{error}</p>}
+            {!compact && error && <p className='error'>{error}</p>}
             <form className='cuForm' onSubmit={handleDelete}>
                 <label htmlFor="select_record">Select Record to Delete: </label>
                 <select
@@ -123,7 +123,7 @@ const DeleteForm = ({
                     type="submit" 
                     value="Delete" 
                     disabled={loading || !selectedId}
-                    style={{ backgroundColor: '#dc3545', color: 'white' }}
+                    className="btn-delete"
                 />
             </form>
         </>

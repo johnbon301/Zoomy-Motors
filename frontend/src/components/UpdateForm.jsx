@@ -92,7 +92,7 @@ const UpdateForm = ({ // sets up the props
     return (
         <>
             <h2>{title}</h2>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {error && <p className='error'>{error}</p>}
             <form className='cuForm' onSubmit={handleSubmit}>
                 <label htmlFor="select_record">Select Record: </label>
                 <select
