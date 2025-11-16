@@ -32,20 +32,19 @@ function OrderDetails({ backendURL }) {
             </thead>
             <tbody>
               {orders.map(o => (
-                <TableRow key={o.OrderDetailID ?? o.id} rowObject={o} idKey={'OrderDetailID'} backendURL={backendURL} endpoint={'/api/orderdetails'} refresh={getData} />
+                <TableRow key={o.OrderID ?? o.id} rowObject={o} idKey={'OrderID'} backendURL={backendURL} endpoint={'/api/orderdetails'} refresh={getData} />
               ))}
             </tbody>
           </table>
         </section>
 
         <section className="flex-row">
-          <div className="flex-1">
+            <div className="flex-1">
             <CreateForm
               fields={[
-                { name: 'OrderID', label: 'Order ID', type: 'number', required: true },
+                { name: 'SaleID', label: 'Sale ID', type: 'number', required: true },
                 { name: 'CarID', label: 'Car ID', type: 'number', required: true },
-                { name: 'Quantity', label: 'Quantity', type: 'number' },
-                { name: 'Price', label: 'Price', type: 'number' }
+                { name: 'SalePrice', label: 'Sale Price', type: 'number' }
               ]}
               endpoint={'/api/orderdetails'}
               backendURL={backendURL}
@@ -57,13 +56,12 @@ function OrderDetails({ backendURL }) {
           <div className="flex-1">
             <UpdateForm
               records={orders}
-              recordIdKey={'OrderDetailID'}
-              recordDisplayKey={'OrderDetailID'}
+              recordIdKey={'OrderID'}
+              recordDisplayKey={'OrderID'}
               fields={[
-                { name: 'OrderID', label: 'Order ID', type: 'number' },
+                { name: 'SaleID', label: 'Sale ID', type: 'number' },
                 { name: 'CarID', label: 'Car ID', type: 'number' },
-                { name: 'Quantity', label: 'Quantity', type: 'number' },
-                { name: 'Price', label: 'Price', type: 'number' }
+                { name: 'SalePrice', label: 'Sale Price', type: 'number' }
               ]}
               endpoint={'/api/orderdetails'}
               backendURL={backendURL}

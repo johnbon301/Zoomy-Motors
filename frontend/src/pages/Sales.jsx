@@ -4,7 +4,7 @@ import TableRow from '../components/TableRow';
 import CreateForm from '../components/CreateForm';
 import UpdateForm from '../components/UpdateForm';
 
-function Payment({ backendURL }) {
+function Sales({ backendURL }) {
     const [sales, setSales] = useState([]);
 
     const getData = async () => {
@@ -44,7 +44,7 @@ function Payment({ backendURL }) {
                             fields={[
                                 { name: 'CustomerID', label: 'Customer ID', type: 'number', required: true },
                                 { name: 'SaleDate', label: 'Sale Date', type: 'date' },
-                                { name: 'Total', label: 'Total', type: 'number' },
+                                { name: 'TotalAmount', label: 'Total Amount', type: 'number' },
                                 { name: 'PaymentMethod', label: 'Payment Method', type: 'select', options: ['Cash', 'Credit Card', 'Debit Card'] }
                             ]}
                             endpoint={'/api/sales'}
@@ -62,7 +62,7 @@ function Payment({ backendURL }) {
                             fields={[
                                 { name: 'CustomerID', label: 'Customer ID', type: 'number' },
                                 { name: 'SaleDate', label: 'Sale Date', type: 'date' },
-                                { name: 'Total', label: 'Total', type: 'number' },
+                                { name: 'TotalAmount', label: 'Total Amount', type: 'number' },
                                 { name: 'PaymentMethod', label: 'Payment Method', type: 'select', options: ['Cash', 'Credit Card', 'Debit Card'] }
                             ]}
                             endpoint={'/api/sales'}
@@ -77,4 +77,4 @@ function Payment({ backendURL }) {
     );
 }
 
-export default Payment;
+export default Sales;

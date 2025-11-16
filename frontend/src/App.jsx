@@ -4,8 +4,7 @@ import Homepage from './pages/HomePage';
 import Cars from './pages/Cars';
 import Customers from './pages/Customers';
 import OrderDetail from './pages/OrderDetails';
-import Payment from './pages/Payment';
-import SaleCars from './pages/SaleCars';
+import Sales from './pages/Sales';
 import TestDrives from './pages/Test_Drives';
 import Navigation from './components/Navigation';
 
@@ -43,8 +42,7 @@ function App() {
         <Route path="/cars" element={<Cars backendURL={backendURL} />} />
         <Route path="/customers" element={<Customers backendURL={backendURL} />} />
         <Route path="/orderdetails" element={<OrderDetail backendURL={backendURL} />} />
-        <Route path="/payment" element={<Payment backendURL={backendURL} />} />
-        <Route path="/SaleCars" element={<SaleCars backendURL={backendURL} />} />
+        <Route path="/sales" element={<Sales backendURL={backendURL} />} />
         <Route path="/test-drives" element={<TestDrives backendURL={backendURL} />} />
       </Routes>
 

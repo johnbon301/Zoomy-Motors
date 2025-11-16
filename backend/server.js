@@ -15,100 +15,6 @@ app.use(express.json());
 
 app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
-// CRUD Routes for Customers
-// READ - Get all customers
-app.get('/api/customers', async (req, res) => {
-  try {
-    const [rows] = await db.query('SELECT * FROM customers;');
-    res.json(rows);
-  } catch (err) {
-    console.error('Error fetching customers:', err);
-    res.status(500).send('Database query failed.');
-  }
-});
-
-// READ - Get single customer by ID
-app.get('/api/customers/:id', async (req, res) => {
-  try {
-    const [rows] = await db.query('SELECT * FROM customers WHERE id = ?;', [req.params.id]);
-    if (rows.length === 0) {
-      return res.status(404).send('Customer not found.');
-    }
-    res.json(rows[0]);
-  } catch (err) {
-    console.error('Error fetching customer:', err);
-    res.status(500).send('Database query failed.');
-  }
-});
-
-// CREATE - Add new customer
-app.post('/api/customers', async (req, res) => {
-  const { fname, lname, email, phone, address, credit_score } = req.body;
-  try {
-    const [result] = await db.query(
-      'INSERT INTO customers (fname, lname, email, phone, address, credit_score) VALUES (?, ?, ?, ?, ?, ?);',
-      [fname, lname, email, phone, address, credit_score]
-    );
-    res.status(201).json({ id: result.insertId, ...req.body });
-  } catch (err) {
-    console.error('Error creating customer:', err);
-    res.status(500).send('Database insert failed.');
-  }
-});
-
-// UPDATE - Update customer by ID
-app.put('/api/customers/:id', async (req, res) => {
-  const { email, phone, address, credit_score } = req.body;
-  try {
-    const updateFields = [];
-    const updateValues = [];
-
-    if (email !== undefined) {
-      updateFields.push('email = ?');
-      updateValues.push(email);
-    }
-    if (phone !== undefined) {
-      updateFields.push('phone = ?');
-      updateValues.push(phone);
-    }
-    if (address !== undefined) {
-      updateFields.push('address = ?');
-      updateValues.push(address);
-    }
-    if (credit_score !== undefined) {
-      updateFields.push('credit_score = ?');
-      updateValues.push(credit_score);
-    }
-
-    if (updateFields.length === 0) {
-      return res.status(400).send('No fields to update.');
-    }
-
-    updateValues.push(req.params.id);
-    const query = `UPDATE customers SET ${updateFields.join(', ')} WHERE id = ?;`;
-    
-    await db.query(query, updateValues);
-    res.json({ message: 'Customer updated successfully.' });
-  } catch (err) {
-    console.error('Error updating customer:', err);
-    res.status(500).send('Database update failed.');
-  }
-});
-
-// DELETE - Delete customer by ID
-app.delete('/api/customers/:id', async (req, res) => {
-  try {
-    const [result] = await db.query('DELETE FROM customers WHERE id = ?;', [req.params.id]);
-    if (result.affectedRows === 0) {
-      return res.status(404).send('Customer not found.');
-    }
-    res.json({ message: 'Customer deleted successfully.' });
-  } catch (err) {
-    console.error('Error deleting customer:', err);
-    res.status(500).send('Database delete failed.');
-  }
-});
-
 
 // ============================================
 // CUSTOMERS CRUD
@@ -302,11 +208,11 @@ app.get('/api/orderdetails/:id', async (req, res) => {
 });
 
 app.post('/api/orderdetails', async (req, res) => {
-  const { CarID, SalePrice } = req.body;
+  const { SaleID, CarID, SalePrice } = req.body;
   try {
     const [result] = await db.query(
-      'INSERT INTO OrderDetails (CarID, SalePrice) VALUES (?, ?);',
-      [CarID, SalePrice]
+      'INSERT INTO OrderDetails (SaleID, CarID, SalePrice) VALUES (?, ?, ?);',
+      [SaleID, CarID, SalePrice]
     );
     res.status(201).json({ OrderID: result.insertId, ...req.body });
   } catch (err) {
@@ -316,11 +222,12 @@ app.post('/api/orderdetails', async (req, res) => {
 });
 
 app.put('/api/orderdetails/:id', async (req, res) => {
-  const { CarID, SalePrice } = req.body;
+  const { SaleID, CarID, SalePrice } = req.body;
   try {
     const updateFields = [];
     const updateValues = [];
 
+    if (SaleID !== undefined) { updateFields.push('SaleID = ?'); updateValues.push(SaleID); }
     if (CarID !== undefined) { updateFields.push('CarID = ?'); updateValues.push(CarID); }
     if (SalePrice !== undefined) { updateFields.push('SalePrice = ?'); updateValues.push(SalePrice); }
 
@@ -379,11 +286,11 @@ app.get('/api/sales/:id', async (req, res) => {
 });
 
 app.post('/api/sales', async (req, res) => {
-  const { CustomerID, OrderID, SaleDate, TotalAmount, PaymentMethod } = req.body;
+  const { CustomerID, SaleDate, TotalAmount, PaymentMethod } = req.body;
   try {
     const [result] = await db.query(
-      'INSERT INTO Sales (CustomerID, OrderID, SaleDate, TotalAmount, PaymentMethod) VALUES (?, ?, ?, ?, ?);',
-      [CustomerID, OrderID, SaleDate, TotalAmount, PaymentMethod]
+      'INSERT INTO Sales (CustomerID, SaleDate, TotalAmount, PaymentMethod) VALUES (?, ?, ?, ?);',
+      [CustomerID, SaleDate, TotalAmount, PaymentMethod]
     );
     res.status(201).json({ SaleID: result.insertId, ...req.body });
   } catch (err) {
@@ -393,13 +300,11 @@ app.post('/api/sales', async (req, res) => {
 });
 
 app.put('/api/sales/:id', async (req, res) => {
-  const { CustomerID, OrderID, SaleDate, TotalAmount, PaymentMethod } = req.body;
+  const { CustomerID, SaleDate, TotalAmount, PaymentMethod } = req.body;
   try {
     const updateFields = [];
     const updateValues = [];
-
     if (CustomerID !== undefined) { updateFields.push('CustomerID = ?'); updateValues.push(CustomerID); }
-    if (OrderID !== undefined) { updateFields.push('OrderID = ?'); updateValues.push(OrderID); }
     if (SaleDate !== undefined) { updateFields.push('SaleDate = ?'); updateValues.push(SaleDate); }
     if (TotalAmount !== undefined) { updateFields.push('TotalAmount = ?'); updateValues.push(TotalAmount); }
     if (PaymentMethod !== undefined) { updateFields.push('PaymentMethod = ?'); updateValues.push(PaymentMethod); }
@@ -507,49 +412,6 @@ app.delete('/api/testdrives/:id', async (req, res) => {
     res.json({ message: 'Test drive deleted successfully.' });
   } catch (err) {
     console.error('Error deleting test drive:', err);
-    res.status(500).send('Database delete failed.');
-  }
-});
-
-// ============================================
-// SALES_HAS_CARS CRUD (Many-to-Many Junction Table)
-// ============================================
-app.get('/api/sales_has_cars', async (req, res) => {
-  try {
-    const [rows] = await db.query('SELECT * FROM Sales_Has_Cars;');
-    res.json(rows);
-  } catch (err) {
-    console.error('Error fetching sales-cars relationships:', err);
-    res.status(500).send('Database query failed.');
-  }
-});
-
-app.post('/api/sales_has_cars', async (req, res) => {
-  const { Sales_SaleID, Cars_CarID } = req.body;
-  try {
-    await db.query(
-      'INSERT INTO Sales_Has_Cars (Sales_SaleID, Cars_CarID) VALUES (?, ?);',
-      [Sales_SaleID, Cars_CarID]
-    );
-    res.status(201).json({ message: 'Sales-Cars relationship created.', Sales_SaleID, Cars_CarID });
-  } catch (err) {
-    console.error('Error creating sales-cars relationship:', err);
-    res.status(500).send('Database insert failed.');
-  }
-});
-
-app.delete('/api/sales_has_cars/:saleId/:carId', async (req, res) => {
-  try {
-    const [result] = await db.query(
-      'DELETE FROM Sales_Has_Cars WHERE Sales_SaleID = ? AND Cars_CarID = ?;',
-      [req.params.saleId, req.params.carId]
-    );
-    if (result.affectedRows === 0) {
-      return res.status(404).send('Relationship not found.');
-    }
-    res.json({ message: 'Relationship deleted successfully.' });
-  } catch (err) {
-    console.error('Error deleting sales-cars relationship:', err);
     res.status(500).send('Database delete failed.');
   }
 });
