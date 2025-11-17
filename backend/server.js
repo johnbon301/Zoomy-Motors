@@ -1,3 +1,13 @@
+/*
+Citation for server.js:
+Date: 11/16/2025
+Adapted from: CS340 starter templates and class examples (degree: adapted)
+Notes on originality: This server file implements standard RESTful CRUD operations for a car dealership 
+database. The structure and patterns follow CS340 best practices, with dynamic field updates for flexibility.
+AI tools used: ChatGPT — assisted with refactor prompts to make updates dynamic (only updated provided fields)
+Prompt summary: "Refactor PUT endpoints to dynamically build UPDATE queries based on provided fields for flexibility"
+*/
+
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -16,9 +26,9 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
 
-// ============================================
+//
 // CUSTOMERS CRUD
-// ============================================
+//
 app.get('/api/customers', async (req, res) => {
   try {
     const [rows] = await db.query('SELECT * FROM Customers;');
@@ -97,12 +107,13 @@ app.delete('/api/customers/:id', async (req, res) => {
   }
 });
 
-// ============================================
+//
 // CARS CRUD
-// ============================================
+//
 app.get('/api/cars', async (req, res) => {
   try {
-    const [rows] = await db.query('SELECT * FROM Cars;');
+    // Get all cars in stock (Stock > 0)
+    const [rows] = await db.query('SELECT * FROM Cars WHERE Stock > 0;');
     res.json(rows);
   } catch (err) {
     console.error('Error fetching cars:', err);
@@ -181,9 +192,9 @@ app.delete('/api/cars/:id', async (req, res) => {
   }
 });
 
-// ============================================
+//
 // ORDER DETAILS CRUD
-// ============================================
+//
 app.get('/api/orderdetails', async (req, res) => {
   try {
     const [rows] = await db.query('SELECT * FROM OrderDetails;');
@@ -259,15 +270,40 @@ app.delete('/api/orderdetails/:id', async (req, res) => {
   }
 });
 
-// ============================================
+//
 // SALES CRUD
-// ============================================
+//
 app.get('/api/sales', async (req, res) => {
   try {
     const [rows] = await db.query('SELECT * FROM Sales;');
     res.json(rows);
   } catch (err) {
     console.error('Error fetching sales:', err);
+    res.status(500).send('Database query failed.');
+  }
+});
+
+// Get sale with all its line items (OrderDetails)
+app.get('/api/sales/:id/details', async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      `SELECT 
+        S.SaleID,
+        S.CustomerID,
+        S.SaleDate,
+        S.TotalAmount,
+        S.PaymentMethod,
+        OD.OrderID,
+        OD.CarID,
+        OD.SalePrice
+      FROM Sales S
+      LEFT JOIN OrderDetails OD ON S.SaleID = OD.SaleID
+      WHERE S.SaleID = ?;`,
+      [req.params.id]
+    );
+    res.json(rows);
+  } catch (err) {
+    console.error('Error fetching sale with details:', err);
     res.status(500).send('Database query failed.');
   }
 });
@@ -324,6 +360,21 @@ app.put('/api/sales/:id', async (req, res) => {
   }
 });
 
+// Update sale totals only (common operation)
+app.patch('/api/sales/:id/total', async (req, res) => {
+  const { TotalAmount } = req.body;
+  if (TotalAmount === undefined) {
+    return res.status(400).send('TotalAmount is required.');
+  }
+  try {
+    await db.query('UPDATE Sales SET TotalAmount = ? WHERE SaleID = ?;', [TotalAmount, req.params.id]);
+    res.json({ message: 'Sale total updated successfully.' });
+  } catch (err) {
+    console.error('Error updating sale total:', err);
+    res.status(500).send('Database update failed.');
+  }
+});
+
 app.delete('/api/sales/:id', async (req, res) => {
   try {
     const [result] = await db.query('DELETE FROM Sales WHERE SaleID = ?;', [req.params.id]);
@@ -337,15 +388,27 @@ app.delete('/api/sales/:id', async (req, res) => {
   }
 });
 
-// ============================================
+//
 // TEST DRIVE CRUD
-// ============================================
+//
 app.get('/api/testdrives', async (req, res) => {
   try {
+    // Get all test drives
     const [rows] = await db.query('SELECT * FROM TestDrive;');
     res.json(rows);
   } catch (err) {
     console.error('Error fetching test drives:', err);
+    res.status(500).send('Database query failed.');
+  }
+});
+
+// Get test drives for a specific customer
+app.get('/api/testdrives/customer/:customerId', async (req, res) => {
+  try {
+    const [rows] = await db.query('SELECT * FROM TestDrive WHERE CustomerID = ?;', [req.params.customerId]);
+    res.json(rows);
+  } catch (err) {
+    console.error('Error fetching customer test drives:', err);
     res.status(500).send('Database query failed.');
   }
 });
@@ -399,6 +462,21 @@ app.put('/api/testdrives/:id', async (req, res) => {
     res.json({ message: 'Test drive updated successfully.' });
   } catch (err) {
     console.error('Error updating test drive:', err);
+    res.status(500).send('Database update failed.');
+  }
+});
+
+// Update test drive status only (common operation)
+app.patch('/api/testdrives/:id/status', async (req, res) => {
+  const { Status } = req.body;
+  if (!Status) {
+    return res.status(400).send('Status is required.');
+  }
+  try {
+    await db.query('UPDATE TestDrive SET Status = ? WHERE TestDriveID = ?;', [Status, req.params.id]);
+    res.json({ message: 'Test drive status updated successfully.' });
+  } catch (err) {
+    console.error('Error updating test drive status:', err);
     res.status(500).send('Database update failed.');
   }
 });
