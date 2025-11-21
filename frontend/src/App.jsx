@@ -1,5 +1,4 @@
 import { Routes, Route } from 'react-router-dom';
-import { useState, useEffect } from 'react'; 
 import Homepage from './pages/HomePage';
 import Cars from './pages/Cars';
 import Customers from './pages/Customers';
@@ -10,26 +9,10 @@ import Navigation from './components/Navigation';
 
 function App() {
 
-  // Use the port you assigned to the backend server; consider moving to an env var later
   const backendPort = 4687;
-  // Provide the base URL (do not include an endpoint here). Pages will append `/api/...` as needed.
+  // Created so I dont need to specify the URL so many times
   const backendURL = `http://classwork.engr.oregonstate.edu:${backendPort}`;
-
-  // Optional: keep a small health check fetch (adjust endpoint as your backend exposes it)
-  const [message, setMessage] = useState([]);
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await fetch(`${backendURL}/api/hello`);
-        const rows = await response.json();
-        setMessage(JSON.stringify(rows));
-      } catch (error) {
-        console.log('Error fetching backend', error);
-      }
-    };
-    getData();
-  }, [backendURL]);
-
+  // Used to navigate throught the website
   return (
     <div className="app">
 

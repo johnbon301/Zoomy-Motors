@@ -498,6 +498,23 @@ app.delete('/api/testdrives/:id', async (req, res) => {
     res.status(500).send('Database delete failed.');
   }
 });
+// Reset database
+app.post('/api/reset', async (req, res) => {
+
+  try {
+    const query = "CALL reset_database();";
+    db.query(query, (error, results) => {
+      if (error) {
+        console.log("Reset error:", error);
+        return res.status(500).send("Reset failed");
+      }
+      res.status(200).send("Database reset");
+    });
+  } catch {
+    res.status(500).send("Reset Error");
+  }
+});
+
 // Talks to the frontend
 app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));

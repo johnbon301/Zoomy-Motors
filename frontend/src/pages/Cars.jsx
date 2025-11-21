@@ -23,8 +23,6 @@ function Cars({ backendURL }) {
 
   return (
     <>
-      {/* Optional top navigation */}
-
       <main className="main-container">
         <h1>Cars</h1>
 

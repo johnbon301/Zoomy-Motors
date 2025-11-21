@@ -6,7 +6,7 @@
 // Prompt summary: "Refactor CreateForm to accept fields/endpoint/backendURL/refresh and POST JSON to API".
 import { useState } from 'react';
 
-/**
+/** AI created this which is used for react to read and send to backend
  * Generic CreateForm component for any table
  * @param {Array} fields - Array of field config objects: {name, label, type}
  * @param {string} endpoint - Backend endpoint (e.g., '/api/customers')
@@ -14,24 +14,26 @@ import { useState } from 'react';
  * @param {function} refresh - Callback to refresh parent data
  * @param {string} title - Form title
  */
+
+// Build the form which contains empty strings
 const CreateForm = ({ fields, endpoint, backendURL, refresh, title = "Create Record" }) => {
     const [formData, setFormData] = useState(
         fields.reduce((acc, field) => ({ ...acc, [field.name]: '' }), {})
     );
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
-
+    const [loading, setLoading] = useState(false); // For the submit button
+    const [error, setError] = useState(''); // Stores error message
+    // Updates the form state 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
-
+    // Handles the POST the form data to backend
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError('');
 
-        try {
+        try { // Send data as a JSON
             const response = await fetch(`${backendURL}${endpoint}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -40,8 +42,9 @@ const CreateForm = ({ fields, endpoint, backendURL, refresh, title = "Create Rec
 
             if (response.ok) {
                 alert('Record created successfully');
+                // Resets all form fields to empty
                 setFormData(fields.reduce((acc, field) => ({ ...acc, [field.name]: '' }), {}));
-                refresh();
+                refresh(); // Refreshes window
             } else {
                 setError('Failed to create record');
             }
@@ -56,7 +59,7 @@ const CreateForm = ({ fields, endpoint, backendURL, refresh, title = "Create Rec
     return (
         <>
             <h2>{title}</h2>
-            {error && <p className='error'>{error}</p>}
+            {error && <p className='error'>{error}</p>} 
             <form className='cuForm' onSubmit={handleSubmit}>
                 {fields.map(field => (
                     <div key={field.name}>

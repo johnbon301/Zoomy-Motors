@@ -6,7 +6,7 @@
 // Prompt summary: "Create an UpdateForm that accepts records, fields, endpoint and updates only provided fields via PUT".
 import { useState } from 'react';
 
-/**
+/** AI created this which is used for react to read and send to backend
  * Generic UpdateForm component for any table
  * @param {Array} records - Array of records to update
  * @param {string} recordIdKey - Primary key field (e.g., 'CustomerID', 'CarID')
@@ -17,7 +17,7 @@ import { useState } from 'react';
  * @param {function} refresh - Callback to refresh parent data
  * @param {string} title - Form title
  */
-const UpdateForm = ({ // sets up the props
+const UpdateForm = ({ // Sets up the props
     records, 
     recordIdKey, 
     recordDisplayKey, 
@@ -27,27 +27,27 @@ const UpdateForm = ({ // sets up the props
     refresh, 
     title = "Update Record" 
 }) => {
-    const [selectedId, setSelectedId] = useState(''); // checks the record of the user selected
-    const [formData, setFormData] = useState( // builds an object
+    const [selectedId, setSelectedId] = useState(''); // Checks the record of the user selected
+    const [formData, setFormData] = useState( // Builds an object
         fields.reduce((acc, field) => ({ ...acc, [field.name]: '' }), {})
     );
-    const [loading, setLoading] = useState(false);  // tracks request when it is in process
-    const [error, setError] = useState(''); // sends out error message
+    const [loading, setLoading] = useState(false);  // Tracks request when it is in process
+    const [error, setError] = useState(''); // Sends out error message
 
-    const handleSelectChange = (e) => {  // runs when a user is about to pick a different record and will reset previous records
+    const handleSelectChange = (e) => {  // Runs when a user is about to pick a different record and will reset previous records
         setSelectedId(e.target.value);  
         setFormData(fields.reduce((acc, field) => ({ ...acc, [field.name]: '' }), {}));
         setError('');
     };
 
-    const handleFieldChange = (e) => { //will change whatever is going to be changed
+    const handleFieldChange = (e) => { // Will change a specific field
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = async (e) => { // stops browser
+    const handleSubmit = async (e) => { // Sends PUT request with non-empty fields
         e.preventDefault();
-        if (!selectedId) {
+        if (!selectedId) { // Have to choose a record first
             setError('Please select a record to update');
             return;
         }
@@ -56,17 +56,17 @@ const UpdateForm = ({ // sets up the props
         setError('');
 
         try {
-            // Filter out empty fields (only send provided updates)
+            // Filter out empty fields 
             const updateData = Object.fromEntries(
                 Object.entries(formData).filter(([_, v]) => v !== '')
             );
-
+            // Prevent empty update submissions
             if (Object.keys(updateData).length === 0) {
                 setError('Please fill in at least one field to update');
                 setLoading(false);
                 return;
             }
-
+            // Does the PUT request to backend
             const response = await fetch(`${backendURL}${endpoint}/${selectedId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
@@ -75,9 +75,10 @@ const UpdateForm = ({ // sets up the props
 
             if (response.ok) {
                 alert('Record updated successfully');
+                // Reset state after successful update
                 setSelectedId('');
                 setFormData(fields.reduce((acc, field) => ({ ...acc, [field.name]: '' }), {}));
-                refresh();
+                refresh(); // Refresh window
             } else {
                 setError('Failed to update record');
             }

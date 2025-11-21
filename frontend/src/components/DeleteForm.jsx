@@ -6,7 +6,7 @@
 // Prompt summary: "Create a DeleteForm that accepts records, keys, endpoint and sends DELETE to API with confirmation".
 import { useState } from 'react';
 
-/**
+/** AI created this which is used for react to read and send to backend
  * Generic DeleteForm component for any table
  * @param {Array} records - Array of records to delete from
  * @param {string} recordIdKey - Primary key field (e.g., 'CustomerID', 'CarID')
@@ -24,35 +24,36 @@ const DeleteForm = ({
     backendURL, 
     refresh, 
     title = "Delete Record",
-    // If `singleId` is provided the component will render a compact inline
-    // delete button that deletes that id (useful inside a table row).
+    // If singleId is provided the component will render a compact inline
     singleId = null,
-    // If `compact` is true, hide the title and error paragraph (for inline use)
+    // If compact is true, hide the title and error paragraph (for inline use)
     compact = false,
 }) => {
+    // Tracks selected ID from dropdown menu
     const [selectedId, setSelectedId] = useState('');
+    // Loading spinner state and error message state
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-
+    // Update selected record when using delete form
     const handleSelectChange = (e) => {
         setSelectedId(e.target.value);
         setError('');
     };
-
+    // Use the Delete api that holds the deleter query procedure
     const performDelete = async (idToDelete) => {
         if (!idToDelete) {
             setError('No id provided to delete');
             return false;
         }
 
-        // Confirmation before deleting
+        // Confirm before deleting
         if (!window.confirm('Are you sure you want to delete this record? This action cannot be undone.')) {
             return false;
         }
 
-        setLoading(true);
+        setLoading(true); // Again loading window
         setError('');
-
+        // Send Delete request to backend
         try {
             const response = await fetch(`${backendURL}${endpoint}/${idToDelete}`, {
                 method: 'DELETE',
@@ -61,9 +62,10 @@ const DeleteForm = ({
 
             if (response.ok) {
                 if (!compact) alert('Record deleted successfully');
-                // reset selection when using dropdown mode
+                // Reset selection when using dropdown mode
                 if (!singleId) setSelectedId('');
                 if (typeof refresh === 'function') refresh();
+
                 return true;
             } else {
                 setError('Failed to delete record');
@@ -79,14 +81,14 @@ const DeleteForm = ({
     };
 
     const handleDelete = async (e) => {
-        // When used as a dropdown form `e` is a submit event
+        // When used as a dropdown form e is a submit event
         if (e && e.preventDefault) e.preventDefault();
         const idToDelete = singleId ?? selectedId;
         await performDelete(idToDelete);
     };
 
     if (singleId) {
-        // Inline compact button for single-row deletes (used inside TableRow)
+        // Compact button for single-row deletes
         return (
             <button
                 onClick={handleDelete}
@@ -98,7 +100,7 @@ const DeleteForm = ({
             </button>
         );
     }
-
+    // Full delete form
     return (
         <>
             {!compact && <h2>{title}</h2>}

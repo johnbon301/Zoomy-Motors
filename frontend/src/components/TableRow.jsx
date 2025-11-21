@@ -10,21 +10,18 @@ const TableRow = ({
     onEdit,
     showActions = true,
 }) => {
+    //Find the primary key value for the row
+    // Flexible for common ID field names
     const idValue = rowObject[idKey] ?? rowObject.id ?? rowObject.CarID ?? rowObject.CustomerID;
 
-    const normalizeUrl = (base, ep) => {
-        const b = (base || '').replace(/\/$/, '');
-        const e = ep ? (ep.startsWith('/') ? ep : `/${ep}`) : '';
-        return `${b}${e}`;
-    };
 
-    // deletion is delegated to `DeleteForm` when used inline
-
+    // Edit action in th eparent component
     const handleEdit = (e) => {
         e.preventDefault();
         if (typeof onEdit === 'function') onEdit(rowObject);
     };
-
+    // Determine columns to display though if columns is passsed 
+    // used them if not default to keys in rowobjects
     const keys = Array.isArray(columns) && columns.length > 0 ? columns : Object.keys(rowObject);
 
     return (
