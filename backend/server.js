@@ -1,34 +1,35 @@
 /*
 Citation for server.js:
 Date: 11/16/2025
-Adapted from: CS340 starter templates and class examples (degree: adapted)
+Adapted from: CS340 starter templates, class examples, and from personal website moved onto here (degree: adapted)
 Notes on originality: This server file implements standard RESTful CRUD operations for a car dealership 
 database. The structure and patterns follow CS340 best practices, with dynamic field updates for flexibility.
 AI tools used: ChatGPT — assisted with refactor prompts to make updates dynamic (only updated provided fields)
 Prompt summary: "Refactor PUT endpoints to dynamically build UPDATE queries based on provided fields for flexibility"
 */
 
-import express from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import cors from 'cors';
-import db from './database/db-connector.js'
+import express from 'express'; // Express frameworks
+import path from 'path'; // Imports Node
+import { fileURLToPath } from 'url'; // To use ES modules
+import cors from 'cors'; // Can handle requtes from the frontend
+import db from './database/db-connector.js' // Imports my database to run SQL queries
 
-const app = express();
-const PORT = 4687;
-
+const app = express(); // Express application
+const PORT = 4687; // Backend port number
+// To keep static frontend files
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
+//Cors used to talk frontend to backend
 app.use(cors({ credentials: true, origin: 'http://classwork.engr.oregonstate.edu:9995' }));
-app.use(express.json());
-
+app.use(express.json()); // Parse Json files
+// So people can use the app
 app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
 
 //
 // CUSTOMERS CRUD
 //
+// Get all the data for customers
 app.get('/api/customers', async (req, res) => {
   try {
     const [rows] = await db.query('SELECT * FROM Customers;');
@@ -38,7 +39,7 @@ app.get('/api/customers', async (req, res) => {
     res.status(500).send('Database query failed.');
   }
 });
-
+// Get a single data point
 app.get('/api/customers/:id', async (req, res) => {
   try {
     const [rows] = await db.query('SELECT * FROM Customers WHERE CustomerID = ?;', [req.params.id]);
@@ -51,7 +52,7 @@ app.get('/api/customers/:id', async (req, res) => {
     res.status(500).send('Database query failed.');
   }
 });
-
+// Create a new row for customers
 app.post('/api/customers', async (req, res) => {
   const { FirstName, LastName, Email, Phone, Address, CreditScore } = req.body;
   try {
@@ -65,7 +66,7 @@ app.post('/api/customers', async (req, res) => {
     res.status(500).send('Database insert failed.');
   }
 });
-
+// Update an existing row
 app.put('/api/customers/:id', async (req, res) => {
   const { FirstName, LastName, Email, Phone, Address, CreditScore } = req.body;
   try {
@@ -93,7 +94,7 @@ app.put('/api/customers/:id', async (req, res) => {
     res.status(500).send('Database update failed.');
   }
 });
-
+// Delete a single customer
 app.delete('/api/customers/:id', async (req, res) => {
   try {
     const [result] = await db.query('DELETE FROM Customers WHERE CustomerID = ?;', [req.params.id]);
@@ -110,6 +111,7 @@ app.delete('/api/customers/:id', async (req, res) => {
 //
 // CARS CRUD
 //
+// Get all the data for cars
 app.get('/api/cars', async (req, res) => {
   try {
     // Get all cars in stock (Stock > 0)
@@ -120,7 +122,7 @@ app.get('/api/cars', async (req, res) => {
     res.status(500).send('Database query failed.');
   }
 });
-
+// Selecting a single car from the table
 app.get('/api/cars/:id', async (req, res) => {
   try {
     const [rows] = await db.query('SELECT * FROM Cars WHERE CarID = ?;', [req.params.id]);
@@ -133,7 +135,7 @@ app.get('/api/cars/:id', async (req, res) => {
     res.status(500).send('Database query failed.');
   }
 });
-
+// Creating a single row of a car
 app.post('/api/cars', async (req, res) => {
   const { Model, Year, Make, Price, Status, Stock, Mileage, Color, Horsepower } = req.body;
   try {
@@ -147,7 +149,7 @@ app.post('/api/cars', async (req, res) => {
     res.status(500).send('Database insert failed.');
   }
 });
-
+// Updating a single car from a row
 app.put('/api/cars/:id', async (req, res) => {
   const { Model, Year, Make, Price, Status, Stock, Mileage, Color, Horsepower } = req.body;
   try {
@@ -178,7 +180,7 @@ app.put('/api/cars/:id', async (req, res) => {
     res.status(500).send('Database update failed.');
   }
 });
-
+// Delete a single car from a row
 app.delete('/api/cars/:id', async (req, res) => {
   try {
     const [result] = await db.query('DELETE FROM Cars WHERE CarID = ?;', [req.params.id]);
@@ -195,6 +197,7 @@ app.delete('/api/cars/:id', async (req, res) => {
 //
 // ORDER DETAILS CRUD
 //
+// Get all the orderdetails for that table
 app.get('/api/orderdetails', async (req, res) => {
   try {
     const [rows] = await db.query('SELECT * FROM OrderDetails;');
@@ -204,7 +207,7 @@ app.get('/api/orderdetails', async (req, res) => {
     res.status(500).send('Database query failed.');
   }
 });
-
+// Get a single order detail from a row
 app.get('/api/orderdetails/:id', async (req, res) => {
   try {
     const [rows] = await db.query('SELECT * FROM OrderDetails WHERE OrderID = ?;', [req.params.id]);
@@ -217,7 +220,7 @@ app.get('/api/orderdetails/:id', async (req, res) => {
     res.status(500).send('Database query failed.');
   }
 });
-
+// Create a single row for an order
 app.post('/api/orderdetails', async (req, res) => {
   const { SaleID, CarID, SalePrice } = req.body;
   try {
@@ -231,7 +234,7 @@ app.post('/api/orderdetails', async (req, res) => {
     res.status(500).send('Database insert failed.');
   }
 });
-
+// Update an order for that tow
 app.put('/api/orderdetails/:id', async (req, res) => {
   const { SaleID, CarID, SalePrice } = req.body;
   try {
@@ -256,7 +259,7 @@ app.put('/api/orderdetails/:id', async (req, res) => {
     res.status(500).send('Database update failed.');
   }
 });
-
+// Delete a single order detail
 app.delete('/api/orderdetails/:id', async (req, res) => {
   try {
     const [result] = await db.query('DELETE FROM OrderDetails WHERE OrderID = ?;', [req.params.id]);
@@ -273,6 +276,7 @@ app.delete('/api/orderdetails/:id', async (req, res) => {
 //
 // SALES CRUD
 //
+// Get all the sale data
 app.get('/api/sales', async (req, res) => {
   try {
     const [rows] = await db.query('SELECT * FROM Sales;');
@@ -307,7 +311,7 @@ app.get('/api/sales/:id/details', async (req, res) => {
     res.status(500).send('Database query failed.');
   }
 });
-
+// Get one single data point
 app.get('/api/sales/:id', async (req, res) => {
   try {
     const [rows] = await db.query('SELECT * FROM Sales WHERE SaleID = ?;', [req.params.id]);
@@ -320,7 +324,7 @@ app.get('/api/sales/:id', async (req, res) => {
     res.status(500).send('Database query failed.');
   }
 });
-
+// Add data to table
 app.post('/api/sales', async (req, res) => {
   const { CustomerID, SaleDate, TotalAmount, PaymentMethod } = req.body;
   try {
@@ -334,7 +338,7 @@ app.post('/api/sales', async (req, res) => {
     res.status(500).send('Database insert failed.');
   }
 });
-
+// Update sales row
 app.put('/api/sales/:id', async (req, res) => {
   const { CustomerID, SaleDate, TotalAmount, PaymentMethod } = req.body;
   try {
@@ -361,6 +365,7 @@ app.put('/api/sales/:id', async (req, res) => {
 });
 
 // Update sale totals only (common operation)
+
 app.patch('/api/sales/:id/total', async (req, res) => {
   const { TotalAmount } = req.body;
   if (TotalAmount === undefined) {
@@ -374,7 +379,7 @@ app.patch('/api/sales/:id/total', async (req, res) => {
     res.status(500).send('Database update failed.');
   }
 });
-
+// Delete a row
 app.delete('/api/sales/:id', async (req, res) => {
   try {
     const [result] = await db.query('DELETE FROM Sales WHERE SaleID = ?;', [req.params.id]);
@@ -412,7 +417,7 @@ app.get('/api/testdrives/customer/:customerId', async (req, res) => {
     res.status(500).send('Database query failed.');
   }
 });
-
+// Gets a single data with a specific id number
 app.get('/api/testdrives/:id', async (req, res) => {
   try {
     const [rows] = await db.query('SELECT * FROM TestDrive WHERE TestDriveID = ?;', [req.params.id]);
@@ -425,7 +430,7 @@ app.get('/api/testdrives/:id', async (req, res) => {
     res.status(500).send('Database query failed.');
   }
 });
-
+// Add a new row of data
 app.post('/api/testdrives', async (req, res) => {
   const { CustomerID, CarID, ScheduleDate, Status } = req.body;
   try {
@@ -439,7 +444,7 @@ app.post('/api/testdrives', async (req, res) => {
     res.status(500).send('Database insert failed.');
   }
 });
-
+// Updates a single data point
 app.put('/api/testdrives/:id', async (req, res) => {
   const { CustomerID, CarID, ScheduleDate, Status } = req.body;
   try {
@@ -480,7 +485,7 @@ app.patch('/api/testdrives/:id/status', async (req, res) => {
     res.status(500).send('Database update failed.');
   }
 });
-
+// Deletes a single test drive data point
 app.delete('/api/testdrives/:id', async (req, res) => {
   try {
     const [result] = await db.query('DELETE FROM TestDrive WHERE TestDriveID = ?;', [req.params.id]);
@@ -493,11 +498,11 @@ app.delete('/api/testdrives/:id', async (req, res) => {
     res.status(500).send('Database delete failed.');
   }
 });
-
+// Talks to the frontend
 app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
-
+// Starts the server
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running at http://classwork.engr.oregonstate.edu:${PORT}`);
 });
