@@ -1,26 +1,26 @@
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-function Navigation( { backendURL } ) {
+function Navigation({ backendURL }) {
 
-    const handleReset = async () => { // Used for reset button
-
-    try {
-        const response = await fetch(`${backendURL}/api/reset`, {
-        method: "POST"
-        });
+    const handleReset = async () => {
+        if (!window.confirm('Are you sure you want to reset the database?')) return;
         
-        if(response) { 
-            alert("Database is reset");
-            window.location.reload(); // Reloads the page
-        } else {
-            alert("Database did not reset");
+        try {
+            const response = await fetch(`${backendURL}/api/reset`, {
+                method: 'POST'
+            });
+            
+            if (response.ok) {
+                alert('Database reset successfully');
+                window.location.reload();
+            } else {
+                alert('Failed to reset database');
+            }
+        } catch (err) {
+            console.error('Reset error:', err);
+            alert('Error contacting backend');
         }
-
-    } catch (err) { // If talking to the backend does not work
-        console.error(err);
-        alert("Error contacting backend")
-    }
-};
+    };
 
     return (
         <nav className="content">
@@ -32,8 +32,8 @@ function Navigation( { backendURL } ) {
                 <li><Link to="/sales"> Sales </Link></li>
                 <li><Link to="/test-drives"> Test Drive </Link></li>
             </ul>
-            <button onClick={handleReset} style={{ marginLeft: "20px" }}>
-                Reset
+            <button onClick={handleReset} style={{ marginLeft: '10px', padding: '8px 16px', backgroundColor: '#f44336', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+                Reset Database
             </button>
         </nav>
     );
