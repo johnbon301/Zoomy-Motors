@@ -32,7 +32,7 @@ function Navigation({ backendURL }) {
                 <li><Link to="/sales"> Sales </Link></li>
                 <li><Link to="/test-drives"> Test Drive </Link></li>
             </ul>
-            <button onClick={handleReset} style={{ marginLeft: '10px', padding: '8px 16px', backgroundColor: '#f44336', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+            <button onClick={handleReset} className="btn-reset">
                 Reset Database
             </button>
         </nav>

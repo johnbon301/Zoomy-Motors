@@ -97,7 +97,7 @@ app.put('/api/customers/:id', async (req, res) => {
 // Delete a single customer
 app.delete('/api/customers/:id', async (req, res) => {
   try {
-    const [result] = await db.query('DELETE FROM Customers WHERE CustomerID = ?;', [req.params.id]);
+    const [result] = await db.query('CALL DeleteCustomer(?)', [req.params.id]);
     if (result.affectedRows === 0) {
       return res.status(404).send('Customer not found.');
     }
@@ -183,7 +183,7 @@ app.put('/api/cars/:id', async (req, res) => {
 // Delete a single car from a row
 app.delete('/api/cars/:id', async (req, res) => {
   try {
-    const [result] = await db.query('DELETE FROM Cars WHERE CarID = ?;', [req.params.id]);
+    const [result] = await db.query('CALL DeleteCar(?)', [req.params.id]);
     if (result.affectedRows === 0) {
       return res.status(404).send('Car not found.');
     }
@@ -262,7 +262,7 @@ app.put('/api/orderdetails/:id', async (req, res) => {
 // Delete a single order detail
 app.delete('/api/orderdetails/:id', async (req, res) => {
   try {
-    const [result] = await db.query('DELETE FROM OrderDetails WHERE OrderID = ?;', [req.params.id]);
+    const [result] = await db.query('CALL DeleteOrderDetail(?)', [req.params.id]);
     if (result.affectedRows === 0) {
       return res.status(404).send('Order not found.');
     }
@@ -382,7 +382,7 @@ app.patch('/api/sales/:id/total', async (req, res) => {
 // Delete a row
 app.delete('/api/sales/:id', async (req, res) => {
   try {
-    const [result] = await db.query('DELETE FROM Sales WHERE SaleID = ?;', [req.params.id]);
+    const [result] = await db.query('CALL DeleteSale(?)', [req.params.id]);
     if (result.affectedRows === 0) {
       return res.status(404).send('Sale not found.');
     }
@@ -488,7 +488,7 @@ app.patch('/api/testdrives/:id/status', async (req, res) => {
 // Deletes a single test drive data point
 app.delete('/api/testdrives/:id', async (req, res) => {
   try {
-    const [result] = await db.query('DELETE FROM TestDrive WHERE TestDriveID = ?;', [req.params.id]);
+    const [result] = await db.query('CALL DeleteTestDrve(?)', [req.params.id]);
     if (result.affectedRows === 0) {
       return res.status(404).send('Test drive not found.');
     }
@@ -502,7 +502,7 @@ app.delete('/api/testdrives/:id', async (req, res) => {
 app.post('/api/reset', async (req, res) => {
 
   try {
-    const query = "CALL reset_database();";
+    const query = "CALL ResetDatabase();";
     db.query(query, (error, results) => {
       if (error) {
         console.log("Reset error:", error);
