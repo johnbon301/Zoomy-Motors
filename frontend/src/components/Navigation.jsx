@@ -6,9 +6,7 @@ function Navigation({ backendURL }) {
         if (!window.confirm('Are you sure you want to reset the database?')) return;
         
         try {
-            const response = await fetch(`${backendURL}/api/reset`, {
-                method: 'POST'
-            });
+            const response = await fetch(`${backendURL}/api/reset`, { method: 'POST' });
             
             if (response.ok) {
                 alert('Database reset successfully');

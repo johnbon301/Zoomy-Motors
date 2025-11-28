@@ -502,16 +502,11 @@ app.delete('/api/testdrives/:id', async (req, res) => {
 app.post('/api/reset', async (req, res) => {
 
   try {
-    const query = "CALL ResetDatabase();";
-    db.query(query, (error, results) => {
-      if (error) {
-        console.log("Reset error:", error);
-        return res.status(500).send("Reset failed");
-      }
-      res.status(200).send("Database reset");
-    });
-  } catch {
-    res.status(500).send("Reset Error");
+    await db.query ('CALL ResetDatabase();');
+    res.status(200).send({ message: 'Database reset.'});
+  } catch (error) {
+    console.error('Error resetting database:', error);
+    res.status(500).send('Failed to reset databse');
   }
 });
 
